@@ -60,6 +60,7 @@ def forward_api(forwarded_url):
     api_url = '/%s?%s'% (forwarded_url, urlencode(forward_args, doseq=True))
     bundle = api_call(api_url)
     # not bundle but plain resource
+    print bundle 
     if bundle.get('type') != 'searchset':
         resource = bundle
         bundle = {
@@ -88,13 +89,12 @@ def report_generate(id):
     # read the patient instance by id
     patient = api_call('/Patient/'+id+'?_format=json')
     # search all the observationforgenetics instance for this patient
-    observations = api_call('/observationforgenetics?subject:Patient._id='+id+'&_format=json')
+    observations = api_call('/observationforgenetics?subject:Patient='+id+'&_format=json')
     total = observations.get('total')
     # search the reportforgenetics for this patient
     # in this demo app, we assume one patient only has one reportforgenetics instance
-    diagnosticReports = api_call('/reportforgenetics?subject:Patient._id='+id+'&_format=json')
+    diagnosticReports = api_call('/reportforgenetics?subject:Patient='+id+'&_format=json')
     variation_id = None
-
     report_extensions = diagnosticReports['entry'][0]['resource']['extension']
     for extension in report_extensions:
         if 'Condition' in extension['url']:
@@ -119,15 +119,16 @@ def report_generate(id):
 
     for seq_reference in sequence_refs:
         sequence = api_call('/'+seq_reference+'?_format=json')
+        print sequence
         if sequence['type'] not in 'DNA':
             continue
         variation.append("%s (observed allele/reference allele is %s/%s)" % (variation_id,
-                                                                             sequence['variation']['observedAllele'],
-                                                                             sequence['variation']['referenceAllele']))
-        coordinate.append("%s : chrom %s (%s ~ %s)" % (sequence['referenceSeq'][0]['genomeBuild'].get('text'),
-                                                       sequence['referenceSeq'][0]['chromosome'].get('text'),
-                                                       sequence['variation']['start'],
-                                                       sequence['variation']['end']))
+                                                                             sequence['variant'][0]['observedAllele'],
+                                                                             sequence['variant'][0]['referenceAllele']))
+        coordinate.append("%s : chrom %s (%s ~ %s)" % (sequence['referenceSeq']['genomeBuild'],
+                                                       sequence['referenceSeq']['chromosome'].get('text'),
+                                                       sequence['variant'][0]['start'],
+                                                       sequence['variant'][0]['end']))
 
         # search for all observationforgenetics instances containing this variant
         observations_for_this_variation = api_call('/observationforgenetics?Sequence.variationID='+variation_id+'&_format=json').get('entry')
@@ -156,7 +157,7 @@ def report_generate(id):
                     'frequency': frequency
                     }
 
-    return render_template('patient_info_view.html', **patient_info)
+    return render_template('patient_info_view_v2.html', **patient_info)
 
 
 if __name__ == '__main__':
