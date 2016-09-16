@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from auth import *
+import json
 
 # we use this to shorten a long resource reference when displaying it
 MAX_LINK_LEN = 20
@@ -60,7 +61,7 @@ def forward_api(forwarded_url):
     api_url = '/%s?%s'% (forwarded_url, urlencode(forward_args, doseq=True))
     bundle = api_call(api_url)
     # not bundle but plain resource
-    print bundle 
+    #print json.dumps(bundle,indent=4)
     if bundle.get('type') != 'searchset':
         resource = bundle
         bundle = {
@@ -100,6 +101,7 @@ def report_generate(id):
         if 'Condition' in extension['url']:
             condition_ref = extension['valueReference']['reference']
             condition_resource = api_call('/'+condition_ref+'?_format=json')
+            print json.dumps(condition_resource,indent=4)
             condition.append(condition_resource['code'].get('text'))
     if len(condition)==0:
         condition.append('Unknown')
