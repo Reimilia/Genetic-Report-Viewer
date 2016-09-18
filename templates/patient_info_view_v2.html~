@@ -65,7 +65,11 @@
           <div class="jumbotron">
             <h1>Genetics Report</h1>
             <h1>for {{name}}</h1>
-            <p>{{gender}}, Patient ID: {{ id }}</p>
+		{% if gender=="male" %}
+            <p> Male, Patient ID: {{ id }}</p>
+		{% else %}
+ 	    <p> Female, Patient ID: {{ id }}</p>
+		{% endif %}
           </div>
           <div align="center" class="row">
             <div class="col-xs-6 col-lg-4 anothercol-4">
@@ -84,7 +88,7 @@
             <div class="col-xs-6 col-lg-4 anothercol-4">
               <font size=5>
                 <tt>{% for i in condition %}
-                    {{ i[1] }}
+                    ID: {{ i[1] }}
                     {% endfor %}
                 </tt>
               </font>
