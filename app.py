@@ -17,6 +17,9 @@ def api_call(api_endpoint):
     access_token = request.cookies['access_token']
     auth_header = {'Accept': 'application/json', 'Authorization': 'Bearer %s' % access_token}
     resp = requests.get('%s%s' % (API_BASE, api_endpoint), headers=auth_header)
+    print "this is error infomation"
+    print "****"
+    print '%s%s' % (API_BASE, api_endpoint)
     return resp.json()
 
 
@@ -96,7 +99,7 @@ def report_generate(id):
     # in this demo app, we assume one patient only has one reportforgenetics instance
     diagnosticReports = api_call('/reportforgenetics?subject:Patient='+id+'&_format=json')
     variation_id = None
-    print diagnosticReports.keys()
+    print diagnosticReports
     report_extensions = diagnosticReports['entry'][0]['resource']['extension']
     for extension in report_extensions:
         if 'Condition' in extension['url']:
