@@ -30,6 +30,28 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+            background-color: #428bca;
+
+        }
+        .navbar-inverse{
+          background-color: #428bca;
+        }
+        .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
+          background-color: #428bca;
+        }
+        .navbar-inverse .navbar-nav>li>a{
+             color :white;
+        }
+        .navbar-inverse .navbar-brand{
+            color: white;
+        }
+        .navbar-inverse{
+            border-color:transparent;
+        }
+    </style>
   </head>
 
   <body>
