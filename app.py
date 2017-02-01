@@ -93,11 +93,17 @@ def report_generate(id):
     # read the patient instance by id
     patient = api_call('/Patient/'+id+'?_format=json')
     # search all the observationforgenetics instance for this patient
-    observations = api_call('/observationforgenetics?subject:Patient='+id+'&_format=json')
+    observations = api_call('/Observation?subject:Patient='+id+'&_profile=Observation-genetic&_format=json')
+    #observations = api_call('/Observation?subject:Patient='+id+'&_format=json')
+    #observations = api_call('/Observation?subject:Patient='+id+'&_profile=Observation-genetics&_format=json')
+    #observations = api_call('/Observation/' + id + '?_profile=Observation-genetics&_format=json')
+    #observations = api_call('/metadaa/')
+
     total = observations.get('total')
     # search the reportforgenetics for this patient
     # in this demo app, we assume one patient only has one reportforgenetics instance
-    diagnosticReports = api_call('/reportforgenetics?subject:Patient='+id+'&_format=json')
+    #diagnosticReports = api_call('/reportforgenetics?subject:Patient='+id+'&_format=json')
+    diagnosticReports = api_call('/DiagnosticReport?subject:Patient=' + id + '&_format=json')
     variation_id = None
     print diagnosticReports
     report_extensions = diagnosticReports['entry'][0]['resource']['extension']
@@ -112,7 +118,9 @@ def report_generate(id):
 	    #condition.append(condition_resource['code']['coding'][0].get('code'))
     if len(condition)==0:
         condition.append('Unknown')
+    print "++++++++++++++++++++++"
 
+    print observations
     for observation in observations['entry']:
         obs_value.append(observation['resource'].get('valueCodeableConcept')['text'])
         obs_extensions = observation['resource'].get('extension')
@@ -172,7 +180,7 @@ def report_generate(id):
                     'frequency': frequency
                     }
 
-    return render_template('patient_info_view_v2.html', **patient_info)
+    return render_template('patient_info_view_v3.html', **patient_info)
 
 
 if __name__ == '__main__':
