@@ -154,7 +154,7 @@ def report_generate(id):
                                                        sequence['variant'][0]['end']))
 
         # search for all observationforgenetics instances containing this variant
-        observations_for_this_variation = api_call('/observationforgenetics?Sequence.variationID='+variation_id+'&_format=json').get('entry')
+        observations_for_this_variation = api_call('/Observation?Sequence.variationID='+variation_id+'&_format=json').get('entry')
         subject_id = []
         # collect all patient having this variant
         for entry in observations_for_this_variation:
